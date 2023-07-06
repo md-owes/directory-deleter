@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:directory_deleter.ViewModels"
+             x:Class="directory_deleter.Views.NotePage"
+             Title="NotePage">
+    <ContentPage.BindingContext>
+        <viewModels:NoteViewModel/>
+    </ContentPage.BindingContext>
+    <VerticalStackLayout Spacing="10" Margin="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="File Name :"/>
+            <Label Grid.Column="1" Text="{Binding Filename}"/>
+            <Label Grid.Column="2" Text="File Creation Date :"/>
+            <Label Grid.Column="3" Text="{Binding Date}"/>
+        </Grid>
+        <Editor x:Name="TextEditor" Text="{Binding Text}"
+                Placeholder="Enter your note"
+                HeightRequest="100" />
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+            <Button Text="Save"
+                    Command="{Binding SaveCommand}" />
+
+            <Button Grid.Column="1"
+                    Text="Delete"
+                    Command="{Binding DeleteCommand}" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
