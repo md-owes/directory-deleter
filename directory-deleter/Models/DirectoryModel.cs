@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices.Sensors;
+using Serilog;
 
 namespace directory_deleter.Models
 {
@@ -6,6 +8,9 @@ namespace directory_deleter.Models
     {
         public string Locations { get; set; }
         public string Folders { get; set; }
+
+        private int searchCount = 0;
+        private int deleteCount = 0;
 
         public void DeleteFoldersFromDirectories()
         {
@@ -16,58 +21,31 @@ namespace directory_deleter.Models
             {
                 foreach (var folder in folders)
                 {
-                    string foundFolder = FindFolderParallel(location, folder);
-
-                    if (!string.IsNullOrEmpty(foundFolder))
-                    {
-                        Console.WriteLine($"Found the folder at: {foundFolder}");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Folder not found.");
-                    }
+                    Log.Logger.Debug($"Searching for {folder} in location {location}");
+                    SearchAndDelete(location, folder);
                 }
             }
+            Log.Logger.Debug($"Total directories searched {searchCount} and directories deleted {deleteCount}");
         }
 
-        public string FindFolderParallel(string root, string folderToFind)
+        public void SearchAndDelete(string currentDirectory, string targetFolder)
         {
-            ConcurrentQueue<string> dirs = new ConcurrentQueue<string>();
-            dirs.Enqueue(root);
-
-            Parallel.ForEach(Partitioner.Create(dirs, EnumerablePartitionerOptions.NoBuffering),
-                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, (dir, loopState) =>
+            string[] subdirs = Directory.GetDirectories(currentDirectory);
+            searchCount++;
+            foreach (string directory in subdirs)
             {
-                string currentDir = dir;
-                if (new DirectoryInfo(currentDir).Name.Equals(folderToFind, StringComparison.OrdinalIgnoreCase))
+                Log.Logger.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
+                if (Path.GetFileName(directory) == targetFolder)
                 {
-                    Directory.Delete(currentDir, true);
+                    Log.Logger.Debug($"Folder {targetFolder} found. Deleting it");
+                    deleteCount++;
+                    Directory.Delete(directory, true); // Delete the directory and all its contents
                 }
-
-                string[] subDirs;
-                try
+                else
                 {
-                    subDirs = Directory.GetDirectories(currentDir);
+                    SearchAndDelete(directory, targetFolder);
                 }
-                catch (UnauthorizedAccessException)
-                {
-                    // Catch the exception if we do not have access to a directory and continue with the next one.
-                    Console.WriteLine($"No access to {currentDir}. Continuing...");
-                    return;
-                }
-
-                if (subDirs == null)
-                    subDirs = Array.Empty<string>();
-
-                dirs.TryDequeue(out string result);
-
-                foreach (var subDir in subDirs)
-                {
-                    FindFolderParallel(subDir, folderToFind);
-                }
-            });
-
-            return dirs.FirstOrDefault(x => new DirectoryInfo(x).Name.Equals(folderToFind, StringComparison.OrdinalIgnoreCase));
+            }
         }
     }
 }

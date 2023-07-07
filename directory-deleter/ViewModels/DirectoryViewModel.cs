@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using directory_deleter.Models;
-using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Windows.Input;
 
 namespace directory_deleter.ViewModels
@@ -17,11 +18,15 @@ namespace directory_deleter.ViewModels
             DeleteCommand = new RelayCommand(DeleteDirectories);
         }
 
-        private void DeleteDirectories()
+        private async void DeleteDirectories()
         {
+            Log.Logger.Debug("Beginning of method DeleteDirectories");
             _dmodel.Folders = AllFolders;
             _dmodel.Locations = AllLocations;
             _dmodel.DeleteFoldersFromDirectories();
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            await Application.Current.MainPage.DisplayAlert("Alert", "The specified folders have been deleted", "OK"));
+            Log.Logger.Debug("End of method DeleteDirectories");
         }
     }
 }
