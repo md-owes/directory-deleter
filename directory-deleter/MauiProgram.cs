@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using CommunityToolkit.Maui;
+using Serilog;
 
 namespace directory_deleter;
 
@@ -17,6 +18,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

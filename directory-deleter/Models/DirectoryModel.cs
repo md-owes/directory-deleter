@@ -1,45 +1,49 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices.Sensors;
+﻿using CommunityToolkit.Maui.Alerts;
 using Serilog;
 
 namespace directory_deleter.Models
 {
     internal class DirectoryModel
     {
-        public string Locations { get; set; }
-        public string Folders { get; set; }
+        public string[] Locations { get; set; }
+        public string[] Folders { get; set; }
 
-        private int searchCount = 0;
-        private int deleteCount = 0;
+        private int _searchCount = 0;
+        private int _deleteCount = 0;
 
-        public void DeleteFoldersFromDirectories()
+        public DirectoryModel(string[] locations, string[] folders)
         {
-            string[] locations = Locations.Split('\r');
-            string[] folders = Folders.Split('\r');
+            Folders = folders;
+            Locations = locations;
+        }
 
-            foreach (var location in locations)
+        public async Task DeleteFoldersFromDirectories()
+        {
+            foreach (var location in Locations)
             {
-                foreach (var folder in folders)
+                foreach (var folder in Folders)
                 {
                     Log.Logger.Debug($"Searching for {folder} in location {location}");
                     SearchAndDelete(location, folder);
                 }
             }
-            Log.Logger.Debug($"Total directories searched {searchCount} and directories deleted {deleteCount}");
+
+            await Toast.Make($"The specified folders have been deleted").Show();
+            Log.Logger.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
         }
 
-        public void SearchAndDelete(string currentDirectory, string targetFolder)
+        private void SearchAndDelete(string currentDirectory, string targetFolder)
         {
             string[] subdirs = Directory.GetDirectories(currentDirectory);
-            searchCount++;
+            _searchCount++;
             foreach (string directory in subdirs)
             {
                 Log.Logger.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
                 if (Path.GetFileName(directory) == targetFolder)
                 {
                     Log.Logger.Debug($"Folder {targetFolder} found. Deleting it");
-                    deleteCount++;
                     Directory.Delete(directory, true); // Delete the directory and all its contents
+                    _deleteCount++;
                 }
                 else
                 {
