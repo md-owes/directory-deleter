@@ -1,13 +1,13 @@
 name: Windows build
 on: 
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
       - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes' 
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,15 +22,15 @@ jobs:
     name: Windows Build
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.5.3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: 7.0.x
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v1.3.1
         with:
           vs-prerelease: true
 
@@ -45,7 +45,9 @@ jobs:
         run: dotnet publish -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net7.0-windows10.0.22621.0 /p:GenerateAppxPackageOnBuild=true
 
       - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: windows-ci-build
-          path: directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
+          path: | 
+            directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
+            directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.cer
