@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v2.3.1
         with:
           name: windows-ci-build
-          path: directory-deleter/bin/Release/net7.0-windows10.0.22621.0/*Signed.apk*
+          path: directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
