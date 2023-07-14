@@ -33,17 +33,23 @@ namespace directory_deleter.Models
             }
         }
 
-        public async Task LoadProfile(CancellationToken token)
+        public async Task<ProfileModel> LoadProfile(CancellationToken token)
         {
-            var result = await FolderPicker.Default.PickAsync(token);
-            if (result.IsSuccessful)
+            ProfileModel profileObject = null;
+            var result = await FilePicker.Default.PickAsync();
+            if (result != null && result.ContentType.Contains("json"))
             {
-                await Toast.Make($"The folder was picked: Name - {result.Folder.Name}, Path - {result.Folder.Path}", ToastDuration.Long).Show(token);
+                using var stream = await result.OpenReadAsync();
+                StreamReader reader = new(stream);
+                string text = await reader.ReadToEndAsync(token);
+                profileObject = (ProfileModel)JsonConvert.DeserializeObject(text, GetType());
+                await Toast.Make($"Profile loaded from {result.FileName}", ToastDuration.Long).Show(token);
             }
             else
             {
-                await Toast.Make($"The folder was not picked with error: {result.Exception.Message}").Show(token);
+                await Toast.Make($"Please specify the right profile file").Show(token);
             }
+            return profileObject;
         }
     }
 }
