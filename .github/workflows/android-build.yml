@@ -1,5 +1,4 @@
 name: Android build
-run-name: ${{ github.triggering_actor }} is testing out GitHub Actions 🚀
 on: 
   push:
     branches: [ master ]
@@ -39,6 +38,7 @@ jobs:
         run: |
           dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
+
       - name: Restore Dependencies
         run: dotnet restore directory-deleter/directory-deleter.csproj
 

@@ -42,10 +42,10 @@ jobs:
         run: dotnet restore directory-deleter/directory-deleter.csproj
 
       - name: Publish MAUI Windows
-        run: dotnet publish -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net7.0-windows10.0.22621.0 /p:GenerateAppxPackageOnBuild=true
+        run: dotnet publish -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net7.0-windows10.0.22621.0 /p:GenerateAppxPackageOnBuild=true
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v2.3.1
         with:
-          name: android-ci-build
-          path: directory-deleter/bin/Release/net7.0-android/*Signed.apk*
+          name: windows-ci-build
+          path: directory-deleter/bin/Release/net7.0-windows10.0.22621.0/*Signed.apk*
