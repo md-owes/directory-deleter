@@ -1,4 +1,4 @@
-name: Directory Deleter Actions
+name: Windows build
 run-name: ${{ github.triggering_actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
