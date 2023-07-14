@@ -1,13 +1,13 @@
 name: Android build
 on: 
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths-ignore:
       - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes' 
-  pull_request:
-    branches: [ master ]
+  # pull_request:
+  #   branches: [ main ]
   workflow_dispatch:
 permissions:
   contents: read
