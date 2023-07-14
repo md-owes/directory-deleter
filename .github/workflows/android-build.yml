@@ -40,7 +40,7 @@ jobs:
           dotnet workload install android --ignore-failed-sources
           dotnet workload install maui --ignore-failed-sources
       - name: Restore Dependencies
-        run: dotnet restore directory-deleter.csproj
+        run: dotnet restore directory-deleter/directory-deleter.csproj
 
       - name: Publish MAUI Android
         run: dotnet publish -f:net7.0-android -c:Release /p:AndroidSigningKeyPass=${{secrets.keystorepassword}} /p:AndroidSigningStorePass=${{secrets.keystorepassword}}
