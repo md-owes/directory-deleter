@@ -32,7 +32,20 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.3.1
         with:
-          vs-prerelease: true
+          vs-version: latest
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+          preferLatestVersion: true
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v0
+        with:
+          useConfigFile: true
+          updateAssemblyInfo: true
+          additionalArguments: '/showConfig'
 
       - name: Install MAUI Workloads
         run: |
