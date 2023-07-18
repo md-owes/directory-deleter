@@ -31,7 +31,7 @@ namespace directory_deleter.Models
             string val = JsonConvert.SerializeObject(this, new JsonSerializerSettings() { Formatting = Formatting.Indented, NullValueHandling = NullValueHandling.Ignore });
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(val)))
             {
-                var fileSaveResult = await FileSaver.Default.SaveAsync("profile.json", stream, token);
+                var fileSaveResult = await FileSaver.Default.SaveAsync("profile", stream, token);
                 if (fileSaveResult.IsSuccessful)
                 {
                     await Toast.Make($"File is saved: {fileSaveResult.FilePath}").Show(token);

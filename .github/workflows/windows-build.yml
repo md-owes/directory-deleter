@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.3
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
@@ -34,38 +36,38 @@ jobs:
         with:
           vs-version: latest
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.x'
-          preferLatestVersion: true
+      #- name: Install GitVersion
+      #  uses: gittools/actions/gitversion/setup@v0
+      #  with:
+      #    versionSpec: '5.x'
+      #    preferLatestVersion: true
 
-      - name: Determine Version
-        id:   gitversion
-        uses: gittools/actions/gitversion/execute@v0
-        with:
-          useConfigFile: true
-          updateAssemblyInfo: true
-          additionalArguments: '/showConfig'
+      #- name: Determine Version
+      #  id:   gitversion
+      #  uses: gittools/actions/gitversion/execute@v0
+      #  with:
+      #    useConfigFile: true
+      #    updateAssemblyInfo: true
+      #    additionalArguments: '/showConfig'
 
-      - name: Display Version
-        run: |
-          echo "Major: ${{ steps.gitversion.outputs.major }}"
-          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-          echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
-          echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-          echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
-          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+      #- name: Display Version
+      #  run: |
+      #    echo "Major: ${{ steps.gitversion.outputs.major }}"
+      #    echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+      #    echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+      #    echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+      #    echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+      #    echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
+      #    echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+      #    echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
+      #    echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+      #    echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
+      #    echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
 
       - name: Install MAUI Workloads
         run: |
           dotnet workload install maui --ignore-failed-sources
-          
+        
       - name: Restore Dependencies
         run: dotnet restore directory-deleter/directory-deleter.csproj
 
