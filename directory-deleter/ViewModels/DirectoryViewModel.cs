@@ -70,10 +70,17 @@ namespace directory_deleter.ViewModels
         private async Task DeleteDirectories()
         {
             Log.Logger.Debug("Beginning of method DeleteDirectories");
-            if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
+            try
             {
-                _directoryModel = new DirectoryModel(lstLocations, lstFolders);
-                await _directoryModel.DeleteFoldersFromDirectories();
+                if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
+                {
+                    _directoryModel = new DirectoryModel(lstLocations, lstFolders);
+                    await _directoryModel.DeleteFoldersFromDirectories();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Debug($"Error thrown in DeleteDirectories => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
             Log.Logger.Debug("End of method DeleteDirectories");
         }
@@ -86,11 +93,18 @@ namespace directory_deleter.ViewModels
         private async Task SaveProfile(CancellationToken token)
         {
             Log.Logger.Debug("Beginning of method SaveProfile");
-            if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
+            try
             {
-                _profileModel = new ProfileModel(lstLocations, lstFolders);
-                await _profileModel.SaveProfile(token);
-                await Toast.Make($"File is saved").Show(token);
+                if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
+                {
+                    _profileModel = new ProfileModel(lstLocations, lstFolders);
+                    await _profileModel.SaveProfile(token);
+                    await Toast.Make($"File is saved").Show(token);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Debug($"Error thrown in SaveProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
             Log.Logger.Debug("End of method SaveProfile");
         }
@@ -105,13 +119,20 @@ namespace directory_deleter.ViewModels
         private async Task LoadProfile(CancellationToken token)
         {
             Log.Logger.Debug("Beginning of method LoadProfile");
-            _profileModel = new ProfileModel(AllLocations?.Split('\r'), AllFolders?.Split('\r'));
-            ProfileModel _profileLoad = await _profileModel.LoadProfile(token);
-
-            if (_profileLoad != null)
+            try
             {
-                AllFolders = string.Join("\r", _profileLoad.ProfileFolders);
-                AllLocations = string.Join("\r", _profileLoad.ProfileLocations);
+                _profileModel = new ProfileModel(Array.Empty<string>(), Array.Empty<string>());
+                ProfileModel _profileLoad = await _profileModel.LoadProfile(token);
+
+                if (_profileLoad != null)
+                {
+                    AllFolders = string.Join("\r", _profileLoad.ProfileFolders);
+                    AllLocations = string.Join("\r", _profileLoad.ProfileLocations);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Debug($"Error thrown in LoadProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
             Log.Logger.Debug("End of method LoadProfile");
         }
@@ -137,8 +158,8 @@ namespace directory_deleter.ViewModels
         /// <returns>True if the directories and folders were successfully retrieved; otherwise, false.</returns>
         private bool TryGetDirectoriesAndFolders(out string[] directories, out string[] folders)
         {
-            directories = AllLocations?.Split('\r');
-            folders = AllFolders?.Split('\r');
+            directories = AllLocations?.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            folders = AllFolders?.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             return (folders != null && folders.Length > 0) && (directories != null && directories.Length > 0);
         }
     }

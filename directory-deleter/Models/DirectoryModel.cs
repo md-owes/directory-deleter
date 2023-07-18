@@ -32,7 +32,7 @@ namespace directory_deleter.Models
             {
                 foreach (var folder in Folders)
                 {
-                    Log.Logger.Debug($"Searching for {folder} in location {location}");
+                    Log.Logger.Debug($"Searching for {folder} in root location {location}");
                     await SearchAndDeleteAsync(location, folder);
                 }
             }
