@@ -17,9 +17,22 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
     
 jobs:
+  calculate-version:
+    name: Calculate Version
+    runs-on: ubuntu-latest
+    outputs:
+      semVer: ${{ steps.gitversion.outputs.semVer }}
+    steps:
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0
+
   build-windows:
     runs-on: windows-latest
     name: Windows Build
+    needs: calculate-version
+    env:
+      SEMVER: ${{ needs.calculate-version.outputs.semVer }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.3
@@ -36,46 +49,17 @@ jobs:
         with:
           vs-version: latest
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.x'
-          preferLatestVersion: true
-
-      - name: Determine Version
-        id:   gitversion
-        uses: gittools/actions/gitversion/execute@v0
-        # with:
-        #   useConfigFile: true
-        #   updateAssemblyInfo: true
-        #   additionalArguments: '/showConfig'
-
       - name: Display Version
         run: |
-          echo "Major: ${{ steps.gitversion.outputs.major }}"
-          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-          echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
-          echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-          echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
-          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+          echo SemVer: $SEMVER
 
-      - name: Display GitVersion outputs (step output with prefix)
-        run: |
-          echo "Major: ${{ steps.gitversion.outputs.GitVersion_Major }}"
-          echo "Minor: ${{ steps.gitversion.outputs.GitVersion_Minor }}"
-          echo "Patch: ${{ steps.gitversion.outputs.GitVersion_Patch }}"
 
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
         with:
           csproj: 'directory-deleter/directory-deleter.csproj'
-          version: '2.5' # to keep value unique
-          displayVersion: '5.1.2'
+          version: '0' # to keep value unique
+          displayVersion: $SEMVER
           printFile: true # optional
                
       - name: Restore Dependencies
