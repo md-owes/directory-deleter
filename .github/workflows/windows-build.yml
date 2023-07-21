@@ -64,9 +64,9 @@ jobs:
       #    echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
       #    echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
 
-      - name: Install MAUI Workloads
-        run: |
-          dotnet workload install maui --ignore-failed-sources
+      # - name: Install MAUI Workloads
+      #   run: |
+      #     dotnet workload install maui --ignore-failed-sources
         
       - name: Restore Dependencies
         run: dotnet restore directory-deleter/directory-deleter.csproj
