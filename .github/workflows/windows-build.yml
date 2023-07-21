@@ -36,37 +36,51 @@ jobs:
         with:
           vs-version: latest
 
-      #- name: Install GitVersion
-      #  uses: gittools/actions/gitversion/setup@v0
-      #  with:
-      #    versionSpec: '5.x'
-      #    preferLatestVersion: true
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+          preferLatestVersion: true
 
-      #- name: Determine Version
-      #  id:   gitversion
-      #  uses: gittools/actions/gitversion/execute@v0
-      #  with:
-      #    useConfigFile: true
-      #    updateAssemblyInfo: true
-      #    additionalArguments: '/showConfig'
+      - name: Determine Version
+        id:   gitversion
+        uses: gittools/actions/gitversion/execute@v0
+        # with:
+        #   useConfigFile: true
+        #   updateAssemblyInfo: true
+        #   additionalArguments: '/showConfig'
 
-      #- name: Display Version
-      #  run: |
-      #    echo "Major: ${{ steps.gitversion.outputs.major }}"
-      #    echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-      #    echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-      #    echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-      #    echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
-      #    echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
-      #    echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
-      #    echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
-      #    echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-      #    echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
-      #    echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
-        
+      - name: Display Version
+        run: |
+          echo "Major: ${{ steps.gitversion.outputs.major }}"
+          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+          echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
+          echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+          echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
+          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
+          echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+
+      - name: Display GitVersion outputs (step output with prefix)
+        run: |
+          echo "Major: ${{ steps.gitversion.outputs.GitVersion_Major }}"
+          echo "Minor: ${{ steps.gitversion.outputs.GitVersion_Minor }}"
+          echo "Patch: ${{ steps.gitversion.outputs.GitVersion_Patch }}"
+
+      - name: Create MAUI version
+        uses: managedcode/MAUIAppVersion@v1
+        with:
+          csproj: 'directory-deleter/directory-deleter.csproj'
+          version: '2.5' # to keep value unique
+          displayVersion: '5.1.2'
+          printFile: true # optional
+               
       - name: Restore Dependencies
         run: dotnet restore directory-deleter/directory-deleter.csproj
-
+ 
       - name: Publish MAUI Windows
         run: dotnet publish -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net7.0-windows10.0.22621.0 /p:GenerateAppxPackageOnBuild=true
 
@@ -77,12 +91,3 @@ jobs:
           path: | 
             directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
             directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.cer
-
-      - name: Create MAUI version
-        uses: managedcode/MAUIAppVersion@v1
-        with:
-          csproj: 'directory-deleter/directory-deleter.csproj'
-          version: '2.5' # to keep value unique
-          displayVersion: '5.1.2'
-          printFile: true # optional
-          
