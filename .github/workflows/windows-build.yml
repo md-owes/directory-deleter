@@ -62,7 +62,7 @@ jobs:
 
       - name: Display Version
         run: |
-          echo "SemVer: $SEMVER"
+          echo "SemVer: ${{env.SEMVER}}"
           echo "Semver Alt: ${{ needs.calculate-version.outputs.semVer }}"
 
       # - name: Install GitVersion
@@ -86,7 +86,7 @@ jobs:
         with:
           csproj: 'directory-deleter/directory-deleter.csproj'
           version: '0' # to keep value unique
-          displayVersion: $SEMVER
+          displayVersion: ${{env.SEMVER}}
           printFile: true # optional
                
       - name: Restore Dependencies
