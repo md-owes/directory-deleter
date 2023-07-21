@@ -23,6 +23,11 @@ jobs:
     outputs:
       semVer: ${{ steps.gitversion.outputs.semVer }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.3
+        with:
+          fetch-depth: 0
+          
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0
         with:
