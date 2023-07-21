@@ -62,7 +62,8 @@ jobs:
 
       - name: Display Version
         run: |
-          echo SemVer: $SEMVER
+          echo "SemVer: $SEMVER"
+          echo "Semver Alt: ${{ needs.calculate-version.outputs.semVer }}"
 
       # - name: Install GitVersion
       #   uses: gittools/actions/gitversion/setup@v0
