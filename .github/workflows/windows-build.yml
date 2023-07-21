@@ -112,5 +112,5 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: ${{env.SEMVER}}
           assets:  |
-            directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
-            directory-deleter/bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.cer
+            bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.msix
+            bin/Release/net7.0-windows10.0.22621.0/win10-x64/AppPackages/directory-deleter*/*.cer
