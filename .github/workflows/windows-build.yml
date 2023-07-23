@@ -105,7 +105,7 @@ jobs:
         run: Compress-Archive -Path "${{github.workspace}}/directory-deleter/bin/publish/msix/*" -Destination "${{github.workspace}}/directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip"
 
       - name: Compress EXE
-        run: Compress-Archive -Path "directory-deleter/bin/publish/exe/*" -Destination "directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip"
+        run: Compress-Archive -Path "${{github.workspace}}/directory-deleter/bin/publish/exe/*" -Destination "${{github.workspace}}/directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip"
 
       # - name: Upload Windows Artifact
       #   uses: actions/upload-artifact@v3.1.2
