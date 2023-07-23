@@ -117,15 +117,19 @@ jobs:
           versionSpec: '0.10.x'
           preferLatestVersion: true
 
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          tag: '${{env.SEMVER}}'
+          commit-sha: '${{github.sha}}'
+
       - name: Create release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/create@v0
+        uses: gittools/actions/gitreleasemanager/create@v0.10.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           owner: 'md-owes'
           repository: 'directory-deleter'
           milestone: ${{env.SEMVER}}
           name: '${{env.SEMVER}}'
-          targetcommitish: ${{github.sha}}
-          assets:  |
-            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
-            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
+          
