@@ -117,12 +117,16 @@ jobs:
           versionSpec: '0.10.x'
           preferLatestVersion: true
 
-      - name: Tag commit
-        uses: tvdias/github-tagger@v0.0.2
+      - name: Create tag
+        uses: actions/github-script@v6
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          tag: '${{env.SEMVER}}'
-          commit-sha: '${{github.sha}}'
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{env.SEMVER}}',
+              sha: context.sha
+            })
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
