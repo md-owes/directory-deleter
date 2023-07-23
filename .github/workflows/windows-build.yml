@@ -67,22 +67,6 @@ jobs:
           echo "SemVer: ${{env.SEMVER}}"
           echo "Semver Alt: ${{ needs.calculate-version.outputs.semVer }}"
 
-      # - name: Install GitVersion
-      #   uses: gittools/actions/gitversion/setup@v0
-      #   with:
-      #     versionSpec: '5.x'
-      #     preferLatestVersion: true
-  
-      # - name: Determine Version
-      #   id:   gitversion
-      #   uses: gittools/actions/gitversion/execute@v0
-  
-      # - name: Display Version
-      #   run: |
-      #     echo "Major: ${{ steps.gitversion.outputs.major }}"
-      #     echo "Minor: ${{ steps.gitversion.outputs.minor }}"
-      #     echo "Patch: ${{ steps.gitversion.outputs.patch }}"
-
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
         with:
@@ -117,16 +101,10 @@ jobs:
           versionSpec: '0.10.x'
           preferLatestVersion: true
 
-      - name: Create tag
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/${{env.SEMVER}}',
-              sha: context.sha
-            })
+      - name: Create git tag
+        run: |
+          git tag ${{env.SEMVER}}
+          git push origin ${{env.SEMVER}}
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
@@ -136,4 +114,7 @@ jobs:
           repository: 'directory-deleter'
           milestone: ${{env.SEMVER}}
           name: '${{env.SEMVER}}'
+          assets: | 
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
           
