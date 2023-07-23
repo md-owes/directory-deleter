@@ -130,7 +130,7 @@ jobs:
           owner: 'md-owes'
           repository: 'directory-deleter'
           milestone: ${{env.SEMVER}}
-          name: 'directory-deleter v${{env.SEMVER}}'
+          name: '${{env.SEMVER}}'
           targetcommitish: ${{github.sha}}
           assets:  |
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
