@@ -112,7 +112,7 @@ jobs:
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
           owner: 'md-owes'
           repository: 'directory-deleter'
           milestone: ${{env.SEMVER}}
