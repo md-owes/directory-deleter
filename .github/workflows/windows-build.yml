@@ -119,6 +119,6 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: '${{env.SEMVER}}'
           assets: | 
-            "${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
-            "${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip"
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
           
