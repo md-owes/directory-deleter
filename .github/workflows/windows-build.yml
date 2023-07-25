@@ -73,9 +73,9 @@ jobs:
         uses: managedcode/MAUIAppVersion@v1
         with:
           csproj: 'directory-deleter/directory-deleter.csproj'
-          version: '0' # to keep value unique
+          version: '0'
           displayVersion: ${{env.SEMVER}}
-          printFile: true # optional
+          printFile: true
                
       - name: Restore Dependencies
         run: dotnet restore directory-deleter/directory-deleter.csproj
@@ -86,10 +86,10 @@ jobs:
       - name: Publish MAUI EXE
         run: dotnet publish -p:TargetFramework=net7.0-windows10.0.22621.0 -p:RuntimeIdentifier=win10-x64 -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:WindowsPackageType=None -o ${{github.workspace}}/${{env.PUBLISH_DIR}}/exe
 
-      # - name: Display path information
-      #   run: | 
-      #     echo "Workspace is ${{github.workspace}} and publish path is ${{github.workspace}}/${{env.PUBLISH_DIR}}/msix/"
-      #     echo "Sha to commit ${{github.sha}}"
+      - name: Display path information
+        run: | 
+          echo "Workspace is ${{github.workspace}} and publish path of msix is ${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.msix.zip"
+          echo "Sha to commit ${{github.sha}}"
 
       - name: Compress MSIX
         run: Compress-Archive -Path "${{github.workspace}}/${{env.PUBLISH_DIR}}/msix/*" -Destination "${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.msix.zip"
@@ -119,6 +119,6 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: '${{env.SEMVER}}'
           assets: | 
-            ${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.msix.zip
-            ${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.exe.zip
+            "${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.msix.zip"
+            "${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.exe.zip"
           
