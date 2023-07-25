@@ -44,7 +44,7 @@ jobs:
     needs: calculate-version
     env:
       SEMVER: ${{ needs.calculate-version.outputs.semVer }}
-      PUBLISH_DIR: 'directory-deleter/bin/publish'
+      PUBLISH_DIR: 'directory-deleter\bin\publish'
     steps:
       - name: Checkout
         uses: actions/checkout@v3.5.3
@@ -119,6 +119,6 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: '${{env.SEMVER}}'
           assets: | 
-            "${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.msix.zip"
-            "${{github.workspace}}/${{env.PUBLISH_DIR}}/directory-deleter-v${{env.SEMVER}}.exe.zip"
+            "${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
+            "${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip"
           
