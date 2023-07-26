@@ -87,7 +87,7 @@ jobs:
         run: dotnet publish -p:TargetFramework=net7.0-windows10.0.22621.0 -p:RuntimeIdentifier=win10-x64 -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:WindowsPackageType=None -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\exe
 
       - name: Publish MAUI PKG
-        run: dotnet publish -p:TargetFramework=net7.0-maccatalyst -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:CreatePackage=true -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg
+        run: dotnet publish -p:TargetFramework=net7.0-maccatalyst -p:Configuration=Release -p:RestorePackages=false -p:CreatePackage=true -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg
 
       - name: Display path information
         run: | 
