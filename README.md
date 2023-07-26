@@ -1,25 +1,46 @@
 # directory-deleter
 
-This tool is designed to assist mainly developers and testers who run into frequent problem of deleting temporary artifacts. Using this tool, you can create profiles of frequently deleted locations and folders to delete. 
+This tool is developed to assist mainly developers and testers who run into frequent problem of deleting temporary artifacts. Using this tool, you can create profiles of frequently deleted locations and folders to delete. 
+
+
+## PreRequisites
+
+The following pre-requisites have to be installed or configured before running this tool
+* Ensure you have dotnet 7 SDK and above (latest stable dotnet sdk is preferable)
+
+To work on this tool you need to
+* Ensure you have .Net MAUI workload installed
+    * run the below command which will install maui if not installed already
+        ```
+        dotnet workload install maui
+        ```
+    * If using Visual Studio Code then the C# Dev Kit extension is required which will add the build and run pipelines
 
 
 ## Installation
 
-To install directory-deleter, you need to install the public key certificate first. The certificate is named directory-deleter.cer and it should be installed in Trusted People as mentioned in [Microsoft documentation](https://learn.microsoft.com/en-us/dotnet/maui/windows/deployment/publish-cli#installing-the-app) for store apps
+For MacOS, use the package file named directory-deleter-v{VERSION}.pkg, for Windows server use the exe directory-deleter-v{VERSION}.exe and for Windows 10 & 11 use the msix file directory-deleter-v{VERSION}.msix 
+
+To install directory-deleter on Windows 10 & 11, you need to install the public key certificate first. The certificate is named directory-deleter.cer and it should be installed in Trusted People as mentioned in [Microsoft documentation](https://learn.microsoft.com/en-us/dotnet/maui/windows/deployment/publish-cli#installing-the-app) for store apps
 
 
 ## Usage/Examples
 Enter the required information 
 
-![App Screenshot](/.github/img/img.jpg?raw=true "Optional Title")
+![Step1](/.github/img/FillDetails.jpg?raw=true "Fill required details")
 
 Save as a profile 
 
-![App Screenshot](/.github/img/img.jpg?raw=true "Optional Title")
+![Step2.1](/.github/img/SaveProfileButton.jpg?raw=true "Save Profile Button")
+![Step2.2](/.github/img/SaveProfile.jpg?raw=true "Save Profile")
+
+Clear out filled details
+![Step3](/.github/img/ResetProfile.jpg?raw=true "Reset Profile")
 
 Load saved profile 
 
-![App Screenshot](/.github/img/img.jpg?raw=true "Optional Title")
+![Step4.1](/.github/img/LoadProfileButton.jpg?raw=true "Load Profile Button")
+![Step4.2](/.github/img/LoadProfile.jpg?raw=true "Load Profile")
 
 
 ## Tech Stack
