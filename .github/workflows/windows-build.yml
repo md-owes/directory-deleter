@@ -86,6 +86,9 @@ jobs:
       - name: Publish MAUI EXE
         run: dotnet publish -p:TargetFramework=net7.0-windows10.0.22621.0 -p:RuntimeIdentifier=win10-x64 -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:WindowsPackageType=None -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\exe
 
+      - name: Publish MAUI PKG
+        run: dotnet publish -p:TargetFramework=net7.0-maccatalyst -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:CreatePackage=true -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg
+
       - name: Display path information
         run: | 
           echo "Workspace is ${{github.workspace}} and publish path of msix is ${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
@@ -96,6 +99,14 @@ jobs:
 
       - name: Compress EXE
         run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\exe\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip"
+
+      - name: Compress PKG
+        run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.pkg.zip"
+
+      - name: Publish path listing
+        run: | 
+          cd "${{github.workspace}}\${{env.PUBLISH_DIR}}"
+          ls
 
       - name: Install GitReleaseManager
         uses: gittools/actions/gitreleasemanager/setup@v0
@@ -121,4 +132,5 @@ jobs:
           assets: | 
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.pkg.zip
           
