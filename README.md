@@ -27,19 +27,19 @@ To install directory-deleter on Windows 10 & 11, you need to install the public 
 ## Usage/Examples
 Enter the required information 
 
-<img src="/.github/img/FillDetails.png?raw=true" width=600px height=450px />
+<img src="/.github/img/FillDetails.png?raw=true" width=400px height=300px />
 
 Save as a profile 
 
-<img src="/.github/img/SaveProfileButton.png?raw=true" width=600px height=450px /> <img src="/.github/img/SaveProfileDialog.png?raw=true" width=600px height=450px />
+<img src="/.github/img/SaveProfileButton.png?raw=true" width=400px height=300px /> <img src="/.github/img/SaveProfileDialog.png?raw=true" width=400px height=300px />
 
 Clear out filled details
 
-<img src="/.github/img/ResetProfileButton.png?raw=true" width=600px height=450px />
+<img src="/.github/img/ResetProfileButton.png?raw=true" width=400px height=300px />
 
 Load saved profile 
 
-<img src="/.github/img/LoadProfileButton.png?raw=true" width=600px height=450px /> <img src="/.github/img/LoadProfileDialog.png?raw=true" width=600px height=450px />
+<img src="/.github/img/LoadProfileButton.png?raw=true" width=400px height=300px /> <img src="/.github/img/LoadProfileDialog.png?raw=true" width=400px height=300px />
 
 
 ## Tech Stack
