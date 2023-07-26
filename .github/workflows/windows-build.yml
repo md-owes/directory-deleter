@@ -108,6 +108,11 @@ jobs:
           cd "${{github.workspace}}\${{env.PUBLISH_DIR}}"
           ls
 
+      - name: Publish pkg directory content
+        run: | 
+          cd "${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg"
+          ls
+
       - name: Install GitReleaseManager
         uses: gittools/actions/gitreleasemanager/setup@v0
         with:
