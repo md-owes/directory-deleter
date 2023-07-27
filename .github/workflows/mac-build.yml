@@ -61,7 +61,12 @@ jobs:
       #   run: |
       #     cd 6.0/Apps/WeatherTwentyOne/src/
       #     dotnet restore WeatherTwentyOne.sln
-        
+
+      - name: Install .NET MAUI
+        shell: bash
+        run: |
+          dotnet workload install ios
+    
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
         with:
