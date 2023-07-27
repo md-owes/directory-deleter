@@ -65,13 +65,13 @@ jobs:
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
         with:
-          csproj: 'directory-deleter\directory-deleter.csproj'
+          csproj: 'directory-deleter/directory-deleter.csproj'
           version: '0'
           displayVersion: ${{env.SEMVER}}
           printFile: true
 
       - name: Restore Dependencies
-        run: dotnet restore directory-deleter\directory-deleter.csproj
+        run: dotnet restore directory-deleter/directory-deleter.csproj
 
         # https://docs.microsoft.com/en-us/dotnet/maui/macos/deployment/overview
       - name : Build MacCatalyst App
