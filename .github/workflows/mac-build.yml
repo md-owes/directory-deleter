@@ -82,9 +82,15 @@ jobs:
       - name : Build MacCatalyst App
         shell: bash
         run: |
-          dotnet build -f net7.0-maccatalyst -c Release -o ./artifacts
-          dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=false -o ./artifacts
+          dotnet build -f net7.0-maccatalyst -c Release -o ./bin/publish/artifacts
+          dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=true -o ./bin/publish/artifacts
 
+      - name : Display publish payh
+        shell: bash
+        run: | 
+          cd ./bin/publish/artifacts
+          ls
+          
 #       - name: Build and Run UnitTests
 #         shell: bash
 #         run: |
@@ -95,4 +101,4 @@ jobs:
         with:
           name: artifacts-mac
           path: |
-            ./artifacts/**/*.pkg
+            ./bin/publish/artifacts/**/*.pkg
