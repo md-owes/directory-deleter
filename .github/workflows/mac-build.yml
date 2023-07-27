@@ -65,7 +65,7 @@ jobs:
       - name: Install .NET MAUI
         shell: bash
         run: |
-          dotnet workload install ios
+          dotnet workload install maui
     
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
