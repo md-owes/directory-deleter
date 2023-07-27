@@ -1,25 +1,25 @@
-name: Windows build
-on: 
+name: WindowsBuild
+on:
   push:
-    branches: [ develop ]
+    branches: [develop]
     paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes' 
+      - "**/*.md"
+      - "**/*.gitignore"
+      - "**/*.gitattributes"
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
 env:
-  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_NOLOGO: true # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
-    
+  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
+
 jobs:
   calculate-version:
     name: Calculate Version
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       semVer: ${{ steps.gitversion.outputs.semVer }}
     steps:
@@ -31,7 +31,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0
         with:
-          versionSpec: '5.x'
+          versionSpec: "5.x"
           preferLatestVersion: true
 
       - name: Determine Version
@@ -52,10 +52,17 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
 
+      - uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'SEMVER'
+          value: '${{env.SEMVER}}'
+          repository: md-owes/directory-deleter
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: | 
+          dotnet-version: |
             7.0.x
             3.1.x
 
@@ -73,24 +80,21 @@ jobs:
         uses: managedcode/MAUIAppVersion@v1
         with:
           csproj: 'directory-deleter\directory-deleter.csproj'
-          version: '0'
+          version: "0"
           displayVersion: ${{env.SEMVER}}
           printFile: true
-               
+
       - name: Restore Dependencies
         run: dotnet restore directory-deleter\directory-deleter.csproj
- 
+
       - name: Publish MAUI MSIX
         run: dotnet publish -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net7.0-windows10.0.22621.0 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=${{github.workspace}}\${{env.PUBLISH_DIR}}\msix\
 
       - name: Publish MAUI EXE
         run: dotnet publish -p:TargetFramework=net7.0-windows10.0.22621.0 -p:RuntimeIdentifier=win10-x64 -p:SelfContained=true -p:Configuration=Release -p:RestorePackages=false -p:WindowsPackageType=None -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\exe
 
-      - name: Publish MAUI PKG
-        run: dotnet publish -p:TargetFramework=net7.0-maccatalyst -p:Configuration=Release -p:RestorePackages=false -p:CreatePackage=true -o ${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg
-
       - name: Display path information
-        run: | 
+        run: |
           echo "Workspace is ${{github.workspace}} and publish path of msix is ${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
           echo "Sha to commit ${{github.sha}}"
 
@@ -100,42 +104,24 @@ jobs:
       - name: Compress EXE
         run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\exe\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip"
 
-      - name: Compress PKG
-        run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.pkg.zip"
-
       - name: Publish path listing
-        run: | 
+        run: |
           cd "${{github.workspace}}\${{env.PUBLISH_DIR}}"
           ls
 
-      - name: Publish pkg directory content
-        run: | 
-          cd "${{github.workspace}}\${{env.PUBLISH_DIR}}\pkg"
-          ls
-
-      - name: Install GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/setup@v0
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          versionSpec: '0.10.x'
-          preferLatestVersion: true
-
-      - name: Create git tag
-        run: |
-          git remote remove origin
-          git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
-          git tag ${{env.SEMVER}}
-          git push origin ${{env.SEMVER}}
-
-      - name: Create release with GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/create@v0.10.2
-        with:
-          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
-          owner: 'md-owes'
-          repository: 'directory-deleter'
-          milestone: ${{env.SEMVER}}
-          name: '${{env.SEMVER}}'
-          assets: | 
-            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
+          name: artifacts-windows
+          path: |
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
-            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.pkg.zip
-          
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
+
+      - name: Upload cache
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
+            ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
+          key: directory-deleter-${{runner.os}}-v${{env.SEMVER}}
+          enableCrossOsArchive: true

@@ -1,24 +1,24 @@
-name: macOSCI
+name: MacBuild
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   workflow_dispatch:
 
 permissions:
   contents: read
 env:
-  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_NOLOGO: true # Disable the .NET logo
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
-  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
-        
+  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
+
 jobs:
   calculate-version:
     name: Calculate Version
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       semVer: ${{ steps.gitversion.outputs.semVer }}
     steps:
@@ -30,7 +30,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0
         with:
-          versionSpec: '5.x'
+          versionSpec: "5.x"
           preferLatestVersion: true
 
       - name: Determine Version
@@ -38,7 +38,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0
 
   buildmacCatalyst:
-    runs-on: macos-12
+    runs-on: macos-latest
     name: Mac Build
     needs: calculate-version
     env:
@@ -50,7 +50,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: | 
+          dotnet-version: |
             7.0.x
 
       - name: List installed .NET info
@@ -66,12 +66,12 @@ jobs:
         shell: bash
         run: |
           dotnet workload install maui
-    
+
       - name: Create MAUI version
         uses: managedcode/MAUIAppVersion@v1
         with:
-          csproj: 'directory-deleter/directory-deleter.csproj'
-          version: '0'
+          csproj: "directory-deleter/directory-deleter.csproj"
+          version: "0"
           displayVersion: ${{env.SEMVER}}
           printFile: true
 
@@ -79,26 +79,35 @@ jobs:
         run: dotnet restore directory-deleter/directory-deleter.csproj
 
         # https://docs.microsoft.com/en-us/dotnet/maui/macos/deployment/overview
-      - name : Build MacCatalyst App
+      - name: Build MacCatalyst App
         shell: bash
         run: |
           dotnet build -f net7.0-maccatalyst -c Release -o ./bin/publish/artifacts
           dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=true -o ./bin/publish/artifacts
 
-      - name : Display publish payh
+      - name: Display publish path
         shell: bash
-        run: | 
+        run: |
           cd ./bin/publish/artifacts
           ls
-          
-#       - name: Build and Run UnitTests
-#         shell: bash
-#         run: |
-#           dotnet build <path to unit test csproj>
-#           dotnet test <path to unit test csproj> --no-build --verbosity normal
 
-      - uses: actions/upload-artifact@v2
+      #       - name: Build and Run UnitTests
+      #         shell: bash
+      #         run: |
+      #           dotnet build <path to unit test csproj>
+      #           dotnet test <path to unit test csproj> --no-build --verbosity normal
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
           name: artifacts-mac
           path: |
             ./bin/publish/artifacts/**/*.pkg
+
+      - name: Upload cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./bin/publish/artifacts/**/*.pkg
+          key: directory-deleter-${{runner.os}}-v${{env.SEMVER}}
+          enableCrossOsArchive: true
