@@ -1,0 +1,64 @@
+name: Release App
+on:
+  workflow_run:
+    workflows: ["WindowsBuid,MacBuild"]
+    branches: [main]
+    types: [completed]
+permissions:
+  contents: read
+env:
+  DOTNET_NOLOGO: true # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true # Disable sending .NET CLI telemetry
+
+jobs:
+  release-artifacts:
+    name: Release Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ahmadnassri/action-workflow-run-wait@v1
+
+      - name: Install GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/setup@v0
+        with:
+          versionSpec: "0.10.x"
+          preferLatestVersion: true
+
+      - uses: actions/cache/restore@v3
+        id: mac-cache
+        with:
+          path: "**/*.pkg"
+          key: directory-deleter-macos-v${{env.SEMVER}}
+
+      - uses: actions/cache/restore@v3
+        id: winexe-cache
+        with:
+          path: "**/*.exe.zip"
+          key: directory-deleter-macos-v${{env.SEMVER}}
+
+      - uses: actions/cache/restore@v3
+        id: winmsi-cache
+        with:
+          path: "**/*.msi.zip"
+          key: directory-deleter-macos-v${{env.SEMVER}}
+
+      - name: Create git tag
+        run: |
+          git remote remove origin
+          git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
+          git tag ${{secrets.SEMVER}}
+          git push origin ${{secrets.SEMVER}}
+
+      - name: Create release with GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/create@v0.10.2
+        with:
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+          owner: "md-owes"
+          repository: "directory-deleter"
+          milestone: ${{secrets.SEMVER}}
+          name: "${{secrets.SEMVER}}"
+          assets: |
+            directory-deleter-v${{secrets.SEMVER}}.msix.zip
+            directory-deleter-v${{secrets.SEMVER}}.exe.zip
+            directory-deleter-v${{secrets.SEMVER}}.pkg.zip
