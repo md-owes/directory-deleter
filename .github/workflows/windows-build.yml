@@ -36,7 +36,6 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0
         with:
-          targetPath: ../
           useConfigFile: true
           configFilePath: GitVersion.yml
 
