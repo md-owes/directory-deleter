@@ -31,24 +31,29 @@ jobs:
         shell: bash
         run: |
           echo ${{env.SEMVER}}
-          echo ${{vars.SEMVER}}
 
-      - uses: actions/cache/restore@v3
+      - name: Restore Mac PKG Cache
+        uses: actions/cache/restore@v3
         id: mac-cache
         with:
           path: "**/*.pkg"
+          enableCrossOsArchive: true
           key: directory-deleter-macOS-pkg-v${{env.SEMVER}}
 
-      - uses: actions/cache/restore@v3
+      - name: Restore Win EXE Cache
+        uses: actions/cache/restore@v3
         id: winexe-cache
         with:
           path: "**/*.exe.zip"
+          enableCrossOsArchive: true
           key: directory-deleter-Windows-exe-v${{env.SEMVER}}
 
-      - uses: actions/cache/restore@v3
+      - name: Restore Win MSI Cache
+        uses: actions/cache/restore@v3
         id: winmsi-cache
         with:
           path: "**/*.msi.zip"
+          enableCrossOsArchive: true
           key: directory-deleter-Windows-exe-v${{env.SEMVER}}
 
       - name: Create git tag
