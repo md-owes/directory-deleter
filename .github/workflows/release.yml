@@ -1,7 +1,7 @@
 name: Release App
 on:
   workflow_run:
-    workflows: ["WindowsBuid" , "MacBuild"]
+    workflows: ["WindowsBuid", "MacBuild"]
     branches: [main]
     types: [completed]
 permissions:
@@ -26,7 +26,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
-          dotnet-version: | 
+          dotnet-version: |
             3.1.x
 
       - uses: ahmadnassri/action-workflow-run-wait@v1
@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache/restore@v3
         id: mac-cache
         with:
-          path: | 
+          path: |
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
           enableCrossOsArchive: true
           key: directory-deleter-mac-pkg-v${{env.SEMVER}}
@@ -69,20 +69,19 @@ jobs:
 
       - name: Display cache files
         shell: bash
-        run: | 
+        run: |
           ls
           echo "publish directory"
           echo "================="
           cd directory-deleter/bin/publish
           ls
 
-
-      # - name: Create git tag
-      #   run: |
-      #     git remote remove origin
-      #     git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
-      #     git tag ${{env.SEMVER}}
-      #     git push origin ${{env.SEMVER}}
+      - name: Create git tag
+        run: |
+          git remote remove origin
+          git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
+          git tag ${{env.SEMVER}}
+          git push origin ${{env.SEMVER}}
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
@@ -90,7 +89,6 @@ jobs:
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
           owner: "md-owes"
           repository: "directory-deleter"
-          milestone: ${{env.SEMVER}}
           name: "${{env.SEMVER}}"
 
       - uses: gittools/actions/gitreleasemanager/addasset@v0.10.2
