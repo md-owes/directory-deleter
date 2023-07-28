@@ -90,6 +90,7 @@ jobs:
           owner: "md-owes"
           repository: "directory-deleter"
           name: "${{env.SEMVER}}"
+          milestone: ${{env.SEMVER}}
 
       - uses: gittools/actions/gitreleasemanager/addasset@v0.10.2
         name: Add asset to a release with GitReleaseManager
