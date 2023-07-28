@@ -104,4 +104,4 @@ jobs:
           assets: |
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
-            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg.zip
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
