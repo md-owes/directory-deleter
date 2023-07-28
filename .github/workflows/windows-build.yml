@@ -50,12 +50,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
 
-      - uses: gliech/create-github-secret-action@v1
+      - uses: action-pack/set-variable@v1
         with:
-          name: SEMVER
+          name: 'SEMVER'
           value: '${{env.SEMVER}}'
-          pa_token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
-
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+          
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
