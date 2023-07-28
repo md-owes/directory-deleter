@@ -67,6 +67,13 @@ jobs:
           enableCrossOsArchive: true
           key: directory-deleter-win-exe-v${{env.SEMVER}}
 
+      - name: Display cache files
+        shell: bash
+        run: | 
+          ls
+          cd ..
+          ls
+
       - name: Create git tag
         run: |
           git remote remove origin
@@ -78,6 +85,7 @@ jobs:
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
         with:
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+          targetDirectory: ../
           owner: "md-owes"
           repository: "directory-deleter"
           milestone: ${{env.SEMVER}}
