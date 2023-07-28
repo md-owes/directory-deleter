@@ -18,7 +18,11 @@ jobs:
     env:
       SEMVER: ${{ vars.SEMVER }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3.5.3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+
       - uses: ahmadnassri/action-workflow-run-wait@v1
 
       - name: Install GitReleaseManager
@@ -36,7 +40,8 @@ jobs:
         uses: actions/cache/restore@v3
         id: mac-cache
         with:
-          path: "**/*.pkg"
+          path: | 
+            bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
           enableCrossOsArchive: true
           key: directory-deleter-macOS-pkg-v${{env.SEMVER}}
 
