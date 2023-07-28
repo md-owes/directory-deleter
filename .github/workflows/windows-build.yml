@@ -6,8 +6,6 @@ on:
       - "**/*.md"
       - "**/*.gitignore"
       - "**/*.gitattributes"
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -52,12 +50,11 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
 
-      - uses: hmanzur/actions-set-secret@v2.0.0
+      - uses: gliech/create-github-secret-action@v1
         with:
-          name: 'SEMVER'
+          name: SEMVER
           value: '${{env.SEMVER}}'
-          repository: md-owes/directory-deleter
-          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+          pa_token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
@@ -117,11 +114,18 @@ jobs:
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
 
-      - name: Upload cache
+      - name: Upload EXE cache
         uses: actions/cache/save@v3
         with:
           path: |
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
+          key: directory-deleter-${{runner.os}}-exe-v${{env.SEMVER}}
+          enableCrossOsArchive: true
+
+      - name: Upload MSIX cache
+        uses: actions/cache/save@v3
+        with:
+          path: |
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
-          key: directory-deleter-${{runner.os}}-v${{env.SEMVER}}
+          key: directory-deleter-${{runner.os}}-msix-v${{env.SEMVER}}
           enableCrossOsArchive: true

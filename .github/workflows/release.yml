@@ -15,6 +15,8 @@ jobs:
   release-artifacts:
     name: Release Artifacts
     runs-on: ubuntu-latest
+    env:
+      SEMVER: ${{ secrets.SEMVER }}
     steps:
       - uses: actions/checkout@v2
       - uses: ahmadnassri/action-workflow-run-wait@v1
@@ -29,26 +31,26 @@ jobs:
         id: mac-cache
         with:
           path: "**/*.pkg"
-          key: directory-deleter-macos-v${{env.SEMVER}}
+          key: directory-deleter-macOS-pkg-v${{env.SEMVER}}
 
       - uses: actions/cache/restore@v3
         id: winexe-cache
         with:
           path: "**/*.exe.zip"
-          key: directory-deleter-macos-v${{env.SEMVER}}
+          key: directory-deleter-Windows-exe-v${{env.SEMVER}}
 
       - uses: actions/cache/restore@v3
         id: winmsi-cache
         with:
           path: "**/*.msi.zip"
-          key: directory-deleter-macos-v${{env.SEMVER}}
+          key: directory-deleter-Windows-exe-v${{env.SEMVER}}
 
       - name: Create git tag
         run: |
           git remote remove origin
           git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
-          git tag ${{secrets.SEMVER}}
-          git push origin ${{secrets.SEMVER}}
+          git tag ${{env.SEMVER}}
+          git push origin ${{env.SEMVER}}
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
@@ -56,9 +58,9 @@ jobs:
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
           owner: "md-owes"
           repository: "directory-deleter"
-          milestone: ${{secrets.SEMVER}}
-          name: "${{secrets.SEMVER}}"
+          milestone: ${{env.SEMVER}}
+          name: "${{env.SEMVER}}"
           assets: |
-            directory-deleter-v${{secrets.SEMVER}}.msix.zip
-            directory-deleter-v${{secrets.SEMVER}}.exe.zip
-            directory-deleter-v${{secrets.SEMVER}}.pkg.zip
+            directory-deleter-v${{env.SEMVER}}.msix.zip
+            directory-deleter-v${{env.SEMVER}}.exe.zip
+            directory-deleter-v${{env.SEMVER}}.pkg.zip
