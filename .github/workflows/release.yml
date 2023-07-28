@@ -47,7 +47,7 @@ jobs:
         id: mac-cache
         with:
           path: | 
-            bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
+            bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
           enableCrossOsArchive: true
           key: directory-deleter-mac-pkg-v${{env.SEMVER}}
 
@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache/restore@v3
         id: winexe-cache
         with:
-          path: "**/*.exe.zip"
+          path: directory-deleter\bin\publish\directory-deleter-v${{env.SEMVER}}.exe.zip
           enableCrossOsArchive: true
           key: directory-deleter-win-exe-v${{env.SEMVER}}
 
@@ -63,7 +63,7 @@ jobs:
         uses: actions/cache/restore@v3
         id: winmsi-cache
         with:
-          path: "**/*.msi.zip"
+          path: directory-deleter\bin\publish\directory-deleter-v${{env.SEMVER}}.msi.zip
           enableCrossOsArchive: true
           key: directory-deleter-win-exe-v${{env.SEMVER}}
 
