@@ -61,7 +61,6 @@ jobs:
         with:
           dotnet-version: |
             7.0.x
-            3.1.x
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.3.1
@@ -119,7 +118,7 @@ jobs:
         with:
           path: |
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip
-          key: directory-deleter-${{runner.os}}-exe-v${{env.SEMVER}}
+          key: directory-deleter-win-exe-v${{env.SEMVER}}
           enableCrossOsArchive: true
 
       - name: Upload MSIX cache
@@ -127,5 +126,5 @@ jobs:
         with:
           path: |
             ${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip
-          key: directory-deleter-${{runner.os}}-msix-v${{env.SEMVER}}
+          key: directory-deleter-win-msix-v${{env.SEMVER}}
           enableCrossOsArchive: true
