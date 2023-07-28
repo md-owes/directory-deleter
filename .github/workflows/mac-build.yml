@@ -79,14 +79,14 @@ jobs:
       - name: Build MacCatalyst App
         shell: bash
         run: |
-          dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=true -o bin/publish/pkg
-          mv bin/publish/pkg/directory-deleter-${{env.SEMVER}}.pkg bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg 
+          dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=true -o bin/publish
+          mv bin/publish/directory-deleter-${{env.SEMVER}}.pkg bin/publish/directory-deleter-v${{env.SEMVER}}.pkg 
           
 
       - name: Display publish path
         shell: bash
         run: |
-          cd bin/publish/pkg
+          cd bin/publish
           ls
 
       #       - name: Build and Run UnitTests
@@ -100,12 +100,12 @@ jobs:
         with:
           name: artifacts-mac
           path: |
-            bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
+            bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
 
       - name: Upload cache
         uses: actions/cache@v3
         with:
           path: |
-            bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
+            bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
           key: directory-deleter-mac-pkg-v${{env.SEMVER}}
           enableCrossOsArchive: true
