@@ -23,6 +23,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3.2.0
+        with:
+          dotnet-version: | 
+            3.1.x
+
       - uses: ahmadnassri/action-workflow-run-wait@v1
 
       - name: Install GitReleaseManager
@@ -43,7 +49,7 @@ jobs:
           path: | 
             bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
           enableCrossOsArchive: true
-          key: directory-deleter-macOS-pkg-v${{env.SEMVER}}
+          key: directory-deleter-mac-pkg-v${{env.SEMVER}}
 
       - name: Restore Win EXE Cache
         uses: actions/cache/restore@v3
@@ -51,7 +57,7 @@ jobs:
         with:
           path: "**/*.exe.zip"
           enableCrossOsArchive: true
-          key: directory-deleter-Windows-exe-v${{env.SEMVER}}
+          key: directory-deleter-win-exe-v${{env.SEMVER}}
 
       - name: Restore Win MSI Cache
         uses: actions/cache/restore@v3
@@ -59,7 +65,7 @@ jobs:
         with:
           path: "**/*.msi.zip"
           enableCrossOsArchive: true
-          key: directory-deleter-Windows-exe-v${{env.SEMVER}}
+          key: directory-deleter-win-exe-v${{env.SEMVER}}
 
       - name: Create git tag
         run: |
