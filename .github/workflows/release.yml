@@ -27,6 +27,12 @@ jobs:
           versionSpec: "0.10.x"
           preferLatestVersion: true
 
+      - name: Display Semver
+        shell: bash
+        run: |
+          echo ${{env.SEMVER}}
+          echo ${{secrets.SEMVER}}
+
       - uses: actions/cache/restore@v3
         id: mac-cache
         with:
