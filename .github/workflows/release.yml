@@ -16,7 +16,7 @@ jobs:
     name: Release Artifacts
     runs-on: ubuntu-latest
     env:
-      SEMVER: ${{ secrets.SEMVER }}
+      SEMVER: ${{ vars.SEMVER }}
     steps:
       - uses: actions/checkout@v2
       - uses: ahmadnassri/action-workflow-run-wait@v1
@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           echo ${{env.SEMVER}}
-          echo ${{secrets.SEMVER}}
+          echo ${{vars.SEMVER}}
 
       - uses: actions/cache/restore@v3
         id: mac-cache
