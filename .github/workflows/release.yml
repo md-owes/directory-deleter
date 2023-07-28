@@ -47,7 +47,7 @@ jobs:
         id: mac-cache
         with:
           path: | 
-            bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
           enableCrossOsArchive: true
           key: directory-deleter-mac-pkg-v${{env.SEMVER}}
 
@@ -65,14 +65,16 @@ jobs:
         with:
           path: directory-deleter\bin\publish\directory-deleter-v${{env.SEMVER}}.msi.zip
           enableCrossOsArchive: true
-          key: directory-deleter-win-exe-v${{env.SEMVER}}
+          key: directory-deleter-win-msix-v${{env.SEMVER}}
 
       - name: Display cache files
         shell: bash
         run: | 
           ls
-          cd ..
+          echo "publish directory"
+          cd directory-deleter/bin/publish
           ls
+
 
       - name: Create git tag
         run: |
