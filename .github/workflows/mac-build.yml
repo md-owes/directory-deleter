@@ -1,5 +1,4 @@
 name: MacBuild
-
 on:
   push:
     branches: [develop, main]
@@ -80,8 +79,7 @@ jobs:
         shell: bash
         run: |
           dotnet publish -f net7.0-maccatalyst -c Release -p:CreatePackage=true -o directory-deleter/bin/publish
-          mv directory-deleter/bin/publish/directory-deleter-${{env.SEMVER}}.pkg directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg 
-          
+          mv directory-deleter/bin/publish/directory-deleter-${{env.SEMVER}}.pkg directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg
 
       - name: Display publish path
         shell: bash

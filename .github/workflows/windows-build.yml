@@ -55,10 +55,10 @@ jobs:
 
       - uses: action-pack/set-variable@v1
         with:
-          name: 'SEMVER'
-          value: '${{env.SEMVER}}'
+          name: "SEMVER"
+          value: "${{env.SEMVER}}"
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
-          
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3.2.0
         with:
