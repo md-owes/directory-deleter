@@ -63,7 +63,7 @@ jobs:
         uses: actions/cache/restore@v3
         id: winmsi-cache
         with:
-          path: directory-deleter\bin\publish\directory-deleter-v${{env.SEMVER}}.msi.zip
+          path: directory-deleter\bin\publish\directory-deleter-v${{env.SEMVER}}.msix.zip
           enableCrossOsArchive: true
           key: directory-deleter-win-msix-v${{env.SEMVER}}
 
@@ -72,6 +72,7 @@ jobs:
         run: | 
           ls
           echo "publish directory"
+          echo "================="
           cd directory-deleter/bin/publish
           ls
 
@@ -93,6 +94,6 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: "${{env.SEMVER}}"
           assets: |
-            directory-deleter-v${{env.SEMVER}}.msix.zip
-            directory-deleter-v${{env.SEMVER}}.exe.zip
-            directory-deleter-v${{env.SEMVER}}.pkg.zip
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
+            directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.pkg.zip
