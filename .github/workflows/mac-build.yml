@@ -107,5 +107,5 @@ jobs:
         with:
           path: |
             bin/publish/pkg/directory-deleter-v${{env.SEMVER}}.pkg
-          key: directory-deleter-${{runner.os}}-pkg-v${{env.SEMVER}}
+          key: directory-deleter-macOS-pkg-v${{env.SEMVER}}
           enableCrossOsArchive: true
