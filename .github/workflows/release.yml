@@ -77,22 +77,29 @@ jobs:
           ls
 
 
-      - name: Create git tag
-        run: |
-          git remote remove origin
-          git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
-          git tag ${{env.SEMVER}}
-          git push origin ${{env.SEMVER}}
+      # - name: Create git tag
+      #   run: |
+      #     git remote remove origin
+      #     git remote add origin https://${{ secrets.GITRELEASEMANAGERALLACCESS }}@github.com/md-owes/directory-deleter
+      #     git tag ${{env.SEMVER}}
+      #     git push origin ${{env.SEMVER}}
 
       - name: Create release with GitReleaseManager
         uses: gittools/actions/gitreleasemanager/create@v0.10.2
         with:
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
-          targetDirectory: ../
           owner: "md-owes"
           repository: "directory-deleter"
           milestone: ${{env.SEMVER}}
           name: "${{env.SEMVER}}"
+
+      - uses: gittools/actions/gitreleasemanager/addasset@v0
+        name: Add asset to a release with GitReleaseManager
+        with:
+          token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
+          owner: "md-owes"
+          repository: "directory-deleter"
+          milestone: ${{env.SEMVER}}
           assets: |
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
