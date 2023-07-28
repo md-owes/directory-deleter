@@ -93,7 +93,7 @@ jobs:
           milestone: ${{env.SEMVER}}
           name: "${{env.SEMVER}}"
 
-      - uses: gittools/actions/gitreleasemanager/addasset@v0
+      - uses: gittools/actions/gitreleasemanager/addasset@v0.10.2
         name: Add asset to a release with GitReleaseManager
         with:
           token: ${{ secrets.GITRELEASEMANAGERALLACCESS }}
