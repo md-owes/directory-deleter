@@ -38,7 +38,7 @@ jobs:
         with:
           targetPath: ../
           useConfigFile: true
-          configFilePath: ../GitVersion.yml
+          configFilePath: GitVersion.yml
 
   build-windows:
     runs-on: windows-latest
