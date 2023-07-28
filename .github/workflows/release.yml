@@ -100,6 +100,7 @@ jobs:
           owner: "md-owes"
           repository: "directory-deleter"
           milestone: ${{env.SEMVER}}
+          tagName: ${{env.SEMVER}}
           assets: |
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.msix.zip
             directory-deleter/bin/publish/directory-deleter-v${{env.SEMVER}}.exe.zip
