@@ -32,13 +32,13 @@ namespace directory_deleter.Models
             {
                 foreach (var folder in Folders)
                 {
-                    Log.Logger.Debug($"Searching for {folder} in root location {location}");
+                    Log.Logger?.Error($"Searching for {folder} in root location {location}");
                     await SearchAndDeleteAsync(location, folder);
                 }
             }
 
             await Toast.Make($"The specified folders have been deleted").Show();
-            Log.Logger.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
+            Log.Logger?.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace directory_deleter.Models
                 _searchCount++;
                 foreach (string directory in subdirs)
                 {
-                    Log.Logger.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
+                    Log.Logger?.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
                     if (Path.GetFileName(directory) == targetFolder)
                     {
                         await DeleteDirectoryAsync(directory);
@@ -78,7 +78,7 @@ namespace directory_deleter.Models
         {
             await Task.Run(() =>
             {
-                Log.Logger.Debug($"Deleting directory: {directory}");
+                Log.Logger?.Debug($"Deleting directory: {directory}");
                 Directory.Delete(directory, true); // Delete the directory and all its contents
             });
         }
