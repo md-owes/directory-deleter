@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:directory_deleter.ViewModels"
              x:Class="directory_deleter.Views.MainPage"
-             Title="MainPage">
+             Title="Directory Deleter">
     <ContentPage.BindingContext>
         <viewModels:DirectoryViewModel/>
     </ContentPage.BindingContext>
@@ -19,11 +19,11 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" x:Name="SaveProfile" Grid.Column="0" Text="Save Profile" Command="{Binding SaveProfileCommand}" HeightRequest="40" WidthRequest="120"/>
-        <Button Grid.Row="0" x:Name="ResetProfile" Grid.Column="1" Text="Reset Profile" Command="{Binding ResetProfileCommand}" HeightRequest="40" WidthRequest="120"/>
-        <Button Grid.Row="0" x:Name="LoadProfile" Grid.Column="2" Text="Load Profile"  Command="{Binding LoadProfileCommand}" HeightRequest="40" WidthRequest="120"/>
+        <Button Grid.Row="0" x:Name="SaveProfile" Grid.Column="0" Text="Save Profile" Command="{Binding SaveProfileCommand}" HeightRequest="80" WidthRequest="160"/>
+        <Button Grid.Row="0" x:Name="ResetProfile" Grid.Column="1" Text="Reset Profile" Command="{Binding ResetProfileCommand}" HeightRequest="80" WidthRequest="160"/>
+        <Button Grid.Row="0" x:Name="LoadProfile" Grid.Column="2" Text="Load Profile"  Command="{Binding LoadProfileCommand}" HeightRequest="80" WidthRequest="160"/>
         <Editor Grid.Row="1" Grid.ColumnSpan="3" x:Name="Locations" Text="{Binding AllLocations}" Placeholder="Enter locations " HeightRequest="100" />
         <Editor Grid.Row="2" Grid.ColumnSpan="3" x:Name="Folders" Text="{Binding AllFolders}" Placeholder="Enter the folders that are to be deleted" HeightRequest="100" />
-        <Button Grid.Row="3" Grid.ColumnSpan="3" Text="Delete" Command="{Binding DeleteCommand}" HeightRequest="100"/>
+        <Button Grid.Row="3" Grid.ColumnSpan="3" Margin="10,0,10,0" Text="Delete" Command="{Binding DeleteCommand}" HeightRequest="100"/>
     </Grid>
 </ContentPage>

@@ -69,7 +69,7 @@ namespace directory_deleter.ViewModels
         /// </returns>
         private async Task DeleteDirectories()
         {
-            Log.Logger.Debug("Beginning of method DeleteDirectories");
+            Log.Logger?.Debug("Beginning of method DeleteDirectories");
             try
             {
                 if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
@@ -80,9 +80,9 @@ namespace directory_deleter.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Logger.Debug($"Error thrown in DeleteDirectories => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
+                Log.Logger?.Error($"Error thrown in DeleteDirectories => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
-            Log.Logger.Debug("End of method DeleteDirectories");
+            Log.Logger?.Debug("End of method DeleteDirectories");
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace directory_deleter.ViewModels
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task SaveProfile(CancellationToken token)
         {
-            Log.Logger.Debug("Beginning of method SaveProfile");
+            Log.Logger?.Debug("Beginning of method SaveProfile");
             try
             {
                 if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
@@ -104,9 +104,9 @@ namespace directory_deleter.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Logger.Debug($"Error thrown in SaveProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
+                Log.Logger?.Error($"Error thrown in SaveProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
-            Log.Logger.Debug("End of method SaveProfile");
+            Log.Logger?.Debug("End of method SaveProfile");
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace directory_deleter.ViewModels
         /// </returns>
         private async Task LoadProfile(CancellationToken token)
         {
-            Log.Logger.Debug("Beginning of method LoadProfile");
+            Log.Logger?.Debug("Beginning of method LoadProfile");
             try
             {
                 _profileModel = new ProfileModel(Array.Empty<string>(), Array.Empty<string>());
@@ -132,9 +132,9 @@ namespace directory_deleter.ViewModels
             }
             catch (Exception ex)
             {
-                Log.Logger.Debug($"Error thrown in LoadProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
+                Log.Logger?.Error($"Error thrown in LoadProfile => {ex.Message} with Inner Exception => {ex.InnerException.Message}");
             }
-            Log.Logger.Debug("End of method LoadProfile");
+            Log.Logger?.Debug("End of method LoadProfile");
         }
 
         /// <summary>
@@ -144,10 +144,10 @@ namespace directory_deleter.ViewModels
         /// <returns>A task that represents the asynchronous operation.</returns>
         private async Task ResetProfile(CancellationToken token)
         {
-            Log.Logger.Debug("Beginning of method ResetProfile");
+            Log.Logger?.Debug("Beginning of method ResetProfile");
             AllFolders = AllLocations = "";
             await Toast.Make($"Profile has been reset").Show(token);
-            Log.Logger.Debug("End of method ResetProfile");
+            Log.Logger?.Debug("End of method ResetProfile");
         }
 
         /// <summary>
