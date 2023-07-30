@@ -1,7 +1,7 @@
 name: WindowsBuild
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
     paths-ignore:
       - "**/*.md"
       - "**/*.gitignore"
