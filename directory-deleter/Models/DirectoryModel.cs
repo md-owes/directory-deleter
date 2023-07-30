@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using directory_deleter.Services;
 using Serilog;
 
 namespace directory_deleter.Models
@@ -26,19 +26,20 @@ namespace directory_deleter.Models
         /// <returns>
         /// Toast notification when folders have been deleted.
         /// </returns>
-        public async Task DeleteFoldersFromDirectories()
+        public async Task DeleteFoldersFromDirectories(CancellationToken token)
         {
             foreach (var location in Locations)
             {
                 foreach (var folder in Folders)
                 {
-                    Log.Logger.Debug($"Searching for {folder} in root location {location}");
+                    Log.Logger?.Debug($"Searching for {folder} in root location {location}");
                     await SearchAndDeleteAsync(location, folder);
                 }
             }
 
-            await Toast.Make($"The specified folders have been deleted").Show();
-            Log.Logger.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
+            string message = "The specified folders have been deleted";
+            NotificationService.Instance.Show(message, token);
+            Log.Logger?.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace directory_deleter.Models
                 _searchCount++;
                 foreach (string directory in subdirs)
                 {
-                    Log.Logger.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
+                    Log.Logger?.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
                     if (Path.GetFileName(directory) == targetFolder)
                     {
                         await DeleteDirectoryAsync(directory);
@@ -78,7 +79,7 @@ namespace directory_deleter.Models
         {
             await Task.Run(() =>
             {
-                Log.Logger.Debug($"Deleting directory: {directory}");
+                Log.Logger?.Debug($"Deleting directory: {directory}");
                 Directory.Delete(directory, true); // Delete the directory and all its contents
             });
         }
