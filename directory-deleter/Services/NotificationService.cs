@@ -42,12 +42,14 @@ namespace directory_deleter.Services
 
         private void ShowWindowsNotification(string title, string message)
         {
+#if (!WINDOWS && !MACCATALYST && !MACOS)
             new ToastContentBuilder()
                 .AddArgument("action", "viewConversation")
                 .AddArgument("conversationId", 9813)
                 .AddText(title)
                 .AddText(message)
                 .Show();
+#endif
         }
 
         private async Task ShowMauiNotification(string message, CancellationToken token)
@@ -60,10 +62,10 @@ namespace directory_deleter.Services
             if (!SnoozeNotifications)
             {
                 //include android and ios symbols below, if in future this software is shipped to android and ios devices
-#if (WINDOWS && MACCATALYST && MACOS)
-                ShowMauiNotification.(message, token);
-#else
+#if (!WINDOWS && !MACCATALYST && !MACOS)
                 ShowWindowsNotification("Directory Deleter", message);
+#else
+                ShowMauiNotification(message, token);
 #endif
             }
         }
