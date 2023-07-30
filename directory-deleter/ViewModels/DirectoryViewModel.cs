@@ -2,8 +2,8 @@
 using directory_deleter.Models;
 using Serilog;
 using System.Windows.Input;
-using CommunityToolkit.Maui.Alerts;
 using System.ComponentModel;
+using directory_deleter.Services;
 
 namespace directory_deleter.ViewModels
 {
@@ -34,7 +34,8 @@ namespace directory_deleter.ViewModels
         public ICommand DeleteCommand => new AsyncRelayCommand(DeleteDirectories);
         public ICommand SaveProfileCommand => new AsyncRelayCommand(SaveProfile);
         public ICommand LoadProfileCommand => new AsyncRelayCommand(LoadProfile);
-        public ICommand ResetProfileCommand => new AsyncRelayCommand(ResetProfile);
+        public ICommand ResetProfileCommand => new RelayCommand(ResetProfile);
+        public ICommand SnoozeNotificationsCommand => new RelayCommand<ImageButton>(SnoozeNotifications);
 
         /// <summary>
         /// Raises the PropertyChanged event.
@@ -67,7 +68,7 @@ namespace directory_deleter.ViewModels
         /// <returns>
         /// A task that represents the asynchronous operation.
         /// </returns>
-        private async Task DeleteDirectories()
+        private async Task DeleteDirectories(CancellationToken token)
         {
             Log.Logger?.Debug("Beginning of method DeleteDirectories");
             try
@@ -75,7 +76,7 @@ namespace directory_deleter.ViewModels
                 if (TryGetDirectoriesAndFolders(out string[] lstLocations, out string[] lstFolders))
                 {
                     _directoryModel = new DirectoryModel(lstLocations, lstFolders);
-                    await _directoryModel.DeleteFoldersFromDirectories();
+                    await _directoryModel.DeleteFoldersFromDirectories(token);
                 }
             }
             catch (Exception ex)
@@ -99,7 +100,6 @@ namespace directory_deleter.ViewModels
                 {
                     _profileModel = new ProfileModel(lstLocations, lstFolders);
                     await _profileModel.SaveProfile(token);
-                    await Toast.Make($"File is saved").Show(token);
                 }
             }
             catch (Exception ex)
@@ -140,14 +140,32 @@ namespace directory_deleter.ViewModels
         /// <summary>
         /// Resets the profile by setting all folders and locations to empty strings and displaying a toast message.
         /// </summary>
-        /// <param name="token">The cancellation token.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        private async Task ResetProfile(CancellationToken token)
+        private void ResetProfile()
         {
             Log.Logger?.Debug("Beginning of method ResetProfile");
             AllFolders = AllLocations = "";
-            await Toast.Make($"Profile has been reset").Show(token);
+            string message = "Profile has been reset";
+            NotificationService.Instance.Show(message, new CancellationToken());
             Log.Logger?.Debug("End of method ResetProfile");
+        }
+
+        /// <summary>
+        /// Resets the profile by setting all folders and locations to empty strings and displaying a toast message.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        private void SnoozeNotifications(object parameter)
+        {
+            Log.Logger?.Debug("Beginning of method SnoozeNotifications");
+            NotificationService.Instance.SnoozeNotifications = !NotificationService.Instance.SnoozeNotifications;
+            if (parameter is ImageButton imageControl)
+            {
+                if (NotificationService.Instance.SnoozeNotifications)
+                    imageControl.Source = "notification_off.png";
+                else
+                    imageControl.Source = "notification_on.png";
+            }
+            Log.Logger?.Debug("End of method SnoozeNotifications");
         }
 
         /// <summary>

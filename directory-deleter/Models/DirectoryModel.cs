@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using directory_deleter.Services;
 using Serilog;
 
 namespace directory_deleter.Models
@@ -26,7 +26,7 @@ namespace directory_deleter.Models
         /// <returns>
         /// Toast notification when folders have been deleted.
         /// </returns>
-        public async Task DeleteFoldersFromDirectories()
+        public async Task DeleteFoldersFromDirectories(CancellationToken token)
         {
             foreach (var location in Locations)
             {
@@ -37,7 +37,8 @@ namespace directory_deleter.Models
                 }
             }
 
-            await Toast.Make($"The specified folders have been deleted").Show();
+            string message = "The specified folders have been deleted";
+            NotificationService.Instance.Show(message, token);
             Log.Logger?.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
         }
 
