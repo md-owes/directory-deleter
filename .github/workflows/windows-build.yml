@@ -1,7 +1,7 @@
 name: WindowsBuild
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
     paths-ignore:
       - "**/*.md"
       - "**/*.gitignore"
@@ -83,6 +83,9 @@ jobs:
           displayVersion: ${{env.SEMVER}}
           printFile: true
 
+      - name: Update Manifest
+        run: .\AddVersionToMaui.ps1 ${{env.SEMVER}}.0
+
       - name: Restore Dependencies
         run: dotnet restore directory-deleter\directory-deleter.csproj
 
@@ -98,7 +101,7 @@ jobs:
           echo "Sha to commit ${{github.sha}}"
 
       - name: Compress MSIX
-        run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\msix\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
+        run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\msix\directory-deleter_${{env.SEMVER}}.0_Test\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.msix.zip"
 
       - name: Compress EXE
         run: Compress-Archive -Path "${{github.workspace}}\${{env.PUBLISH_DIR}}\exe\*" -Destination "${{github.workspace}}\${{env.PUBLISH_DIR}}\directory-deleter-v${{env.SEMVER}}.exe.zip"

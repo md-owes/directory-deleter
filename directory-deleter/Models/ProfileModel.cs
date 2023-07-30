@@ -1,8 +1,7 @@
-﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Storage;
+﻿using CommunityToolkit.Maui.Storage;
 using System.Text;
 using Newtonsoft.Json;
+using directory_deleter.Services;
 
 namespace directory_deleter.Models
 {
@@ -34,11 +33,13 @@ namespace directory_deleter.Models
                 var fileSaveResult = await FileSaver.Default.SaveAsync("profile", stream, token);
                 if (fileSaveResult.IsSuccessful)
                 {
-                    await Toast.Make($"File is saved: {fileSaveResult.FilePath}").Show(token);
+                    string message = $"File is saved: {fileSaveResult.FilePath}";
+                    NotificationService.Instance.Show(message, token);
                 }
                 else
                 {
-                    await Toast.Make($"File is not saved, {fileSaveResult.Exception.Message}").Show(token);
+                    string message = $"File is not saved, {fileSaveResult.Exception.Message}";
+                    NotificationService.Instance.Show(message, token);
                 }
             }
         }
@@ -51,6 +52,7 @@ namespace directory_deleter.Models
         public async Task<ProfileModel> LoadProfile(CancellationToken token)
         {
             ProfileModel profileObject = null;
+            string message;
             var result = await FilePicker.Default.PickAsync();
             if (result != null && result.ContentType.Contains("json"))
             {
@@ -59,12 +61,14 @@ namespace directory_deleter.Models
                     StreamReader reader = new StreamReader(stream);
                     string text = await reader.ReadToEndAsync(token);
                     profileObject = (ProfileModel)JsonConvert.DeserializeObject(text, GetType());
-                    await Toast.Make($"Profile loaded from {result.FileName}", ToastDuration.Long).Show(token);
+                    message = $"Profile loaded from {result.FileName}";
+                    NotificationService.Instance.Show(message, token);
                 }
             }
             else
             {
-                await Toast.Make($"Please specify the right profile file").Show(token);
+                message = "Please specify the right profile file";
+                NotificationService.Instance.Show(message, token);
             }
             return profileObject;
         }
