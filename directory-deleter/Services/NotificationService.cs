@@ -65,7 +65,9 @@ namespace directory_deleter.Services
 #if (!WINDOWS && !MACCATALYST && !MACOS)
                 ShowWindowsNotification("Directory Deleter", message);
 #else
+#pragma warning disable CS4014
                 ShowMauiNotification(message, token);
+#pragma warning restore CS4014
 #endif
             }
         }

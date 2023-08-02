@@ -23,6 +23,25 @@ For MacOS, use the package file named directory-deleter-v{VERSION}.pkg, for Wind
 
 To install directory-deleter on Windows 10 & 11, you need to install the public key certificate first. The certificate is named directory-deleter.cer and it should be installed in Trusted People as mentioned in [Microsoft documentation](https://learn.microsoft.com/en-us/dotnet/maui/windows/deployment/publish-cli#installing-the-app) for store apps
 
+To enable logging of issues in directory-deleter
+* On Mac, you need to execute the following command in terminal
+    ```
+    launchctl setenv DD_EnableLogs 1
+    ```
+* On windows, you need to set system environment variable either manually or via below command
+    ```
+    setx DD_EnableLogs "1" /M
+    ```
+
+Now you will see a new file created at the following locations
+* On Mac, file named directory-delete<date>.log will appear in /Users/<username>/Library
+* On Windows, file named directory-delete<date>.log
+    * if it is exe then location will be C:\Users\<username>\AppData\Roaming\<username>\c5a240f0-6866-4aa3-8d34-9c682b0cf217\Data
+    * If it is msix then location will be C:\Users\<username>\AppData\Local\Packages\c5a240f0-6866-4aa3-8d34-9c682b0cf217_<packageid>\LocalState
+
+Note: On Windows the log location will have a static GUID (c5a240f0-6866-4aa3-8d34-9c682b0cf217) in its path, this GUID is a hardcoded GUID for this app and can change in future.
+
+After changing the value of environment variable, you need to close and open the app again for changes to take effect.
 
 ## Usage/Examples
 Enter the required information 
