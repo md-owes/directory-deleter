@@ -61,7 +61,7 @@ namespace directory_deleter.Models
                 foreach (string directory in subdirs)
                 {
                     Log.Logger?.Debug($"Searching for {targetFolder} subdirectories in location {currentDirectory}");
-                    if (Path.GetDirectoryName(directory) == targetFolder)
+                    if (Path.GetFileName(directory) == targetFolder)
                     {
                         await DeleteDirectoryAsync(directory);
                         _deleteCount++;
