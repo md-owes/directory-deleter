@@ -40,6 +40,9 @@ Now you will see a new file created at the following locations
     * If it is msix then location will be C:\Users\<username>\AppData\Local\Packages\c5a240f0-6866-4aa3-8d34-9c682b0cf217_<packageid>\LocalState
 
 Note: On Windows the log location will have a static GUID (c5a240f0-6866-4aa3-8d34-9c682b0cf217) in its path, this GUID is a hardcoded GUID for this app and can change in future.
+
+After changing the value of environment variable, you need to close and open the app again for changes to take effect.
+
 ## Usage/Examples
 Enter the required information 
 
