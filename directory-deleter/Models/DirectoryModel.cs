@@ -1,4 +1,5 @@
-﻿using directory_deleter.Services;
+﻿using System.Diagnostics;
+using directory_deleter.Services;
 using Serilog;
 
 namespace directory_deleter.Models
@@ -28,6 +29,7 @@ namespace directory_deleter.Models
         /// </returns>
         public async Task DeleteFoldersFromDirectories(CancellationToken token)
         {
+            long startTime = Stopwatch.GetTimestamp();
             foreach (var location in Locations)
             {
                 foreach (var folder in Folders)
@@ -37,9 +39,11 @@ namespace directory_deleter.Models
                 }
             }
 
+            TimeSpan diff = Stopwatch.GetElapsedTime(startTime);
             string message = "The specified folders have been deleted";
             NotificationService.Instance.Show(message, token);
             Log.Logger?.Debug($"Total directories searched {_searchCount} and directories deleted {_deleteCount}");
+            Log.Logger?.Debug($"Total duration for deleting directories was {diff.Hours} hours, {diff.Minutes} mins, {diff.Seconds} seconds and {diff.Milliseconds} milliseconds");
         }
 
         /// <summary>
